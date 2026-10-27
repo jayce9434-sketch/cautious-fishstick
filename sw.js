@@ -1,0 +1,5 @@
+const CACHE='crashflock-v6-absw2-lineups';
+const FILES=['./','index.html','style.css','game.js','levels.js','content.js','progression.js','audio.js','manifest.webmanifest','icon-180.png','icon-192.png','icon-512.png','birds-sprites.png','pigs-sprites.png','materials.png','launcher.png','hero-keyart.png','bg-field.png','bg-factory.png','bg-storm.png','bg-cavern.png','bg-sky.png','bg-citadel.png','launch.wav','impact.wav','shatter.wav','victory.wav','boss-hit.wav','music-menu.wav','music-level.wav','music-boss.wav','music-final-boss.wav'];
+self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)))});
+self.addEventListener('activate',e=>e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))])));
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(resp=>{const copy=resp.clone();caches.open(CACHE).then(c=>c.put(e.request,copy)).catch(()=>{});return resp;}).catch(()=>caches.match('index.html'))))});

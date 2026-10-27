@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#202838">
+  <title>Crashflock</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <button id="backBtn" class="compact back-button hidden" type="button" aria-label="Go back">BACK</button>
+      <button id="homeBtn" class="brand" type="button" aria-label="Return to main menu">
+        <img src="icon-192.png" alt="" width="42" height="42">
+        <span>CRASHFLOCK</span>
+      </button>
+      <div class="wallet" aria-label="Player currencies">
+        <span>COINS <strong id="coinCount">0</strong></span>
+        <span>MELT <strong id="meltTopStatus">READY</strong></span>
+        <span>SCRAP <strong id="scrapCount">0</strong></span>
+      </div>
+      <button id="settingsBtn" class="compact" type="button">SETTINGS</button><button id="soundBtn" class="compact" type="button">SOUND ON</button><button id="ownerTopBtn" class="compact owner-hidden" type="button">OWNER</button>
+    </header>
+
+    <main>
+      <section id="homeScreen" class="screen active">
+        <div class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">SLINGSHOT DESTRUCTION CAMPAIGN</p>
+            <h1>Two sides. Four hundred campaign levels. Eighty bosses.</h1>
+            <p>Break twenty material systems, learn a supplied story lineup that changes as the campaign introduces new characters, survive multi-phase bosses, collect optional Character Swaps, and push into modes that do not end when the campaign does.</p>
+            <div class="hero-actions">
+              <button class="primary" data-action="campaign" data-side="bird" type="button">BIRD CAMPAIGN</button>
+              <button class="primary pig" data-action="campaign" data-side="pig" type="button">PIG CAMPAIGN</button>
+            </div>
+          </div>
+          <div class="hero-stat-grid" aria-label="Game features">
+            <article><strong>400</strong><span>CAMPAIGN LEVELS</span></article>
+            <article><strong>80</strong><span>BOSS FIGHTS</span></article>
+            <article><strong>42</strong><span>PLAYABLE CHARACTERS</span></article>
+            <article><strong>20</strong><span>BLOCK SYSTEMS</span></article>
+          </div>
+        </div>
+
+        <div class="mode-grid">
+          <button class="mode-card" data-action="endless" type="button"><b>ENDLESS RUN</b><span>Procedural stages, escalating modifiers, periodic bosses.</span></button>
+          <button class="mode-card" data-action="bossrush" type="button"><b>BOSS RUSH</b><span>Fight unlocked bosses back-to-back with a shared roster.</span></button>
+          <button class="mode-card" data-action="daily" type="button"><b>DAILY CHALLENGE</b><span>A deterministic challenge generated from the current date.</span></button>
+          <button class="mode-card" data-action="melt" type="button"><b>STASIS MELT</b><span>Melt one free random character reward every eight hours, or spend coins to finish it now.</span></button>
+          <button class="mode-card" data-action="roster" type="button"><b>CHARACTER SHOP</b><span>Optional swaps only: buy finite +10/+30/+100 packs or up to four permanent reusable units. Story characters are supplied by levels for free.</span></button>
+          <button class="mode-card" data-action="challenges" type="button"><b>DAILY CONTRACTS</b><span>Three rotating goals, streak rewards, and achievement claims.</span></button>
+          <button class="mode-card" data-action="cosmetics" type="button"><b>COSMETICS WORKSHOP</b><span>Unlock trails, launcher finishes, and impact effects with coins and boss scrap.</span></button>
+          <button class="mode-card" data-action="progression" type="button"><b>STAR VAULT AND MASTERY</b><span>Claim star milestones and level mastery on every playable character.</span></button>
+          <button class="mode-card" data-action="qa" type="button"><b>LEVEL CERTIFICATION</b><span>See solvability, physics, and 3-star reachability checks for all 400 campaign levels.</span></button>
+        </div>
+      </section>
+
+      <section id="campaignScreen" class="screen">
+        <div class="section-head">
+          <div><p class="eyebrow" id="campaignEyebrow">CAMPAIGN</p><h2 id="campaignTitle">Bird Campaign</h2></div>
+          <button id="switchSideBtn" class="secondary" type="button">SWITCH SIDE</button>
+        </div>
+        <div id="storyGrid" class="story-grid"></div>
+        <div id="levelPanel" class="level-panel hidden">
+          <div class="section-head small"><div><p class="eyebrow" id="storyLabel"></p><h3 id="storyTitle"></h3></div><button id="closeLevelsBtn" class="secondary" type="button">CLOSE</button></div>
+          <p id="storyIntro" class="story-intro"></p>
+          <div id="levelGrid" class="level-grid"></div>
+        </div>
+      </section>
+
+      <section id="gameScreen" class="screen game-screen">
+        <div class="game-hud">
+          <div class="hud-left"><span id="hudMode">CAMPAIGN</span><strong id="hudTitle">LEVEL</strong></div>
+          <div class="hud-center"><span>SCORE <strong id="scoreText">0</strong></span><span>2 STAR <strong id="twoStarText">0</strong></span><span>3 STAR <strong id="threeStarText">0</strong></span><span>SHOTS <strong id="shotsText">0</strong></span></div>
+          <div class="hud-right"><button id="rosterBtn" class="secondary" type="button">CHARACTER</button><button id="restartBtn" class="secondary" type="button">RESTART</button><button id="quitBtn" class="secondary" type="button">QUIT</button></div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="gameCanvas" width="1280" height="720" aria-label="Crashflock game field"></canvas>
+          <div id="canvasHint" class="canvas-hint">Drag the loaded character backward from the launcher, then release. Tap again in flight to use its ability.</div>
+          <div id="bossBar" class="boss-bar hidden"><span id="bossName">BOSS</span><div><i id="bossHealth"></i></div></div>
+        </div>
+        <div class="shot-tray">
+          <div><span>LOADED</span><strong id="loadedName">Rook</strong><small id="loadedAbility">Burst</small></div>
+          <div class="shot-dots" id="shotDots"></div>
+          <button id="abilityBtn" class="primary ability" type="button">USE ABILITY</button>
+        </div>
+      </section>
+
+      <section id="rosterScreen" class="screen">
+        <div class="section-head"><div><p class="eyebrow">CHARACTER COLLECTION</p><h2>Character Swap Shop</h2></div><button id="rosterSideBtn" class="secondary" type="button">SHOW PIGS</button></div>
+        <p class="subcopy">Every level supplies a scripted lineup for free. The shop never unlocks the campaign roster: it only gives optional swaps that replace the currently loaded story character. Each permanent unit gives one reusable swap per attempt, up to four per character.</p>
+        <div id="rosterGrid" class="roster-grid"></div>
+      </section>
+
+      <section id="capsuleScreen" class="screen">
+        <div class="lab-layout">
+          <div class="capsule-machine melt-machine">
+            <div class="capsule-orb melt-core" id="meltCore"><span>STASIS CORE</span></div>
+            <p class="eyebrow">FREE CHARACTER REWARD</p>
+            <h2 id="meltState">READY TO START</h2>
+            <p id="meltTimer">One melt becomes claimable after eight hours.</p>
+            <button id="meltMainBtn" class="primary" type="button">START 8-HOUR MELT</button>
+            <button id="meltNowBtn" class="secondary hidden" type="button">MELT NOW · 80 COINS</button>
+            <p>Rewards are finite character swaps only. Permanent reusable units are bought separately in the Character Shop.</p>
+          </div>
+          <div class="reward-log"><p class="eyebrow">RECENT REWARDS</p><h2>Stasis Melt History</h2><div id="rewardLog"></div></div>
+        </div>
+      </section>
+
+
+      <section id="settingsScreen" class="screen">
+        <div class="section-head"><div><p class="eyebrow">GAME SETTINGS</p><h2>Settings</h2></div></div>
+        <div class="settings-grid">
+          <article class="settings-card"><h3>Audio</h3><label>Music <input id="musicToggle" type="checkbox"></label><label>Sound effects <input id="sfxToggle" type="checkbox"></label><label>Master volume <span class="slider-wrap"><input id="masterVolume" type="range" min="0" max="2000" step="25"><b id="masterVolumeValue">100%</b></span></label><label>Music volume <span class="slider-wrap"><input id="musicVolume" type="range" min="0" max="2000" step="25"><b id="musicVolumeValue">55%</b></span></label><label>SFX volume <span class="slider-wrap"><input id="sfxVolume" type="range" min="0" max="2000" step="25"><b id="sfxVolumeValue">62%</b></span></label></article>
+          <article class="settings-card"><h3>Gameplay</h3><label>Aim guide <input id="aimToggle" type="checkbox"></label><label>Reduced motion <input id="motionToggle" type="checkbox"></label><label>Physics debug <input id="physicsToggle" type="checkbox"></label><button id="ownerAccessBtn" class="secondary" type="button">OWNER ACCESS</button></article>
+          <article class="settings-card"><h3>Save</h3><p>Your campaign, stars, currencies, cosmetics, mastery, contracts, and unlocks save in this browser.</p><button id="exportSaveBtn" class="secondary" type="button">EXPORT SAVE</button><button id="importSaveBtn" class="secondary" type="button">IMPORT SAVE</button><input id="importSaveInput" class="hidden" type="file" accept="application/json,.json"><button id="resetSaveBtn" class="danger" type="button">RESET SAVE</button></article>
+        </div>
+      </section>
+
+      <section id="challengesScreen" class="screen">
+        <div class="section-head"><div><p class="eyebrow">RETENTION / REPLAY</p><h2>Daily Contracts and Achievements</h2></div></div>
+        <p class="subcopy">Daily contracts reset each day. Achievement rewards are permanent and can be claimed once.</p>
+        <div id="dailyGrid" class="challenge-grid"></div>
+        <div class="section-head small"><div><p class="eyebrow">LONG TERM</p><h3>Achievements</h3></div></div>
+        <div id="achievementGrid" class="challenge-grid"></div>
+      </section>
+
+      <section id="cosmeticsScreen" class="screen">
+        <div class="section-head"><div><p class="eyebrow">COLLECT / EQUIP</p><h2>Cosmetics Workshop</h2></div><div class="wallet-inline">SCRAP <strong id="cosmeticScrap">0</strong></div></div>
+        <p class="subcopy">Bosses and high-skill clears award scrap. Cosmetics are permanent and never alter physics or score.</p>
+        <div class="section-head small"><div><p class="eyebrow">FLIGHT</p><h3>Trails</h3></div></div><div id="trailGrid" class="cosmetic-grid"></div>
+        <div class="section-head small"><div><p class="eyebrow">LAUNCHER</p><h3>Launcher Finishes</h3></div></div><div id="launcherGrid" class="cosmetic-grid"></div>
+        <div class="section-head small"><div><p class="eyebrow">COLLISION</p><h3>Impact Effects</h3></div></div><div id="impactGrid" class="cosmetic-grid"></div>
+      </section>
+
+      <section id="progressionScreen" class="screen">
+        <div class="section-head"><div><p class="eyebrow">LONG-TERM PROGRESSION</p><h2>Star Vault and Mastery</h2></div><div class="wallet-inline">TOTAL STARS <strong id="totalStarsText">0</strong></div></div>
+        <p class="subcopy">Every campaign star counts toward permanent vault rewards. Using different characters earns mastery XP and extra rewards.</p>
+        <div id="starVaultGrid" class="vault-grid"></div>
+        <div class="section-head small"><div><p class="eyebrow">CHARACTER USE</p><h3>Mastery Leaders</h3></div></div><div id="masteryGrid" class="mastery-grid"></div>
+      </section>
+
+      <section id="ownerScreen" class="screen">
+        <div class="section-head"><div><p class="eyebrow">DEVELOPER TOOLS</p><h2>Owner Menu</h2></div></div>
+        <div class="owner-grid">
+          <button id="ownerUnlockBtn" class="primary" type="button">UNLOCK ALL CAMPAIGN LEVELS</button>
+          <button id="ownerCharsBtn" class="primary" type="button">UNLOCK ALL CHARACTERS</button>
+          <button id="ownerCosmeticsBtn" class="primary" type="button">UNLOCK ALL COSMETICS</button>
+          <button id="ownerThreeStarBtn" class="secondary" type="button">OPEN 3-STAR TEST LEVEL</button>
+          <button id="ownerQaBtn" class="secondary" type="button">RUN FULL QA</button>
+        </div>
+        <article class="owner-currency-card"><h3>Currency Control</h3><p>Add or set exact values without editing the save file.</p><div class="owner-currency-row"><select id="ownerCurrency"><option value="coins">COINS</option><option value="scrap">SCRAP</option></select><input id="ownerCurrencyAmount" type="number" min="0" step="1" value="1000"><button id="ownerCurrencyAdd" class="primary" type="button">ADD</button><button id="ownerCurrencySet" class="secondary" type="button">SET</button></div></article>
+      </section>
+
+      <section id="qaScreen" class="screen">
+        <div class="section-head"><div><p class="eyebrow">AUTOMATED LEVEL QA</p><h2>Campaign Certification</h2></div><button id="rerunQaBtn" class="primary" type="button">RUN TEST AGAIN</button></div>
+        <div class="qa-card"><strong id="qaBig">NOT RUN</strong><span id="qaDetail">The validator uses the same gravity, wind, launch origin, and fixed-step trajectory math as gameplay.</span><div class="meter"><i id="qaMeter"></i></div></div>
+        <div id="qaFailures" class="qa-failures"></div>
+      </section>
+    </main>
+
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-card">
+        <button id="modalBackBtn" class="secondary modal-back" type="button">BACK</button>
+        <p id="modalKicker" class="eyebrow"></p>
+        <h2 id="modalTitle"></h2>
+        <div id="modalBody"></div>
+        <div id="modalActions" class="modal-actions"></div>
+      </div>
+    </div>
+
+    <div id="characterPicker" class="picker hidden" role="dialog" aria-modal="true" aria-label="Choose character">
+      <div class="picker-card"><div class="section-head small"><h3>Choose Character</h3><button id="closePickerBtn" class="secondary" type="button">CLOSE</button></div><div id="pickerGrid" class="picker-grid"></div></div>
+    </div>
+  </div>
+  <script src="content.js"></script>
+  <script src="progression.js"></script>
+  <script src="levels.js"></script>
+  <script src="audio.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

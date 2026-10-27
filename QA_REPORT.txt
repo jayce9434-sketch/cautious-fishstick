@@ -1,0 +1,89 @@
+CRASHFLOCK ABSW2-STYLE REBUILD QA REPORT
+Generated: 2026-10-26
+
+CAMPAIGN
+- Bird side: 200 levels
+- Pig side: 200 levels
+- Total: 400 levels
+- Boss cadence per story: 5 / 10 / 15 / 20
+- Playable characters: 42
+- Material/block systems: 20
+
+STORY LINEUP / SWAP QA
+- Core campaign characters are NOT coin/star grind unlocks.
+- Each level has a deterministic supplied lineup.
+- New characters are introduced automatically by story level and appear in the supplied lineup immediately.
+- Tested introductions: Level 1 Rook, Level 2 Kestrel, Level 4 Brim, Level 7 Volt, Level 11 Mistral, Level 23 Swoop, through Level 197 Crown.
+- Supplied lineup shots consume zero swap inventory: PASS.
+- Replacing a supplied shot with an owned finite swap consumes exactly 1 finite unit: PASS.
+- After an optional swap shot ends, the next launcher character returns to the next supplied lineup slot: PASS.
+- Permanent units and finite stock remain separate from campaign progression.
+
+SCORING / 3-STAR QA
+- Enemy defeat score: 5,000.
+- Unused shot clear bonus: 10,000 each.
+- Optional demolition core: 2,500.
+- Campaign certification: 400/400 PASS.
+- Impossible 3-star certification failures: 0.
+- Tightest certified margin: Bird Level 1.
+  - 3-star target: 22,000
+  - certified clean-clear score: 25,000
+  - margin: 3,000
+- Browser runtime: Bird Level 1 certified shot returned LEVEL CLEARED · 3 STARS at 25,000 score.
+
+PHYSICS
+- Unsupported blocks receive gravity.
+- Generated layouts receive structural supports instead of beginning with floating gameplay blocks.
+- Supports are destructible.
+- Targets track support and fall when it disappears.
+- Falling blocks can crush targets after gameplay begins.
+- Blocks receive lateral/angular impulse feedback from hits.
+
+AUDIO
+- Local menu music present.
+- Local normal-level music present.
+- Local boss music present and runtime-selected on boss levels.
+- Local final-boss music present.
+- Launch, impact, shatter, boss-hit, and victory SFX present.
+- Master/Music/SFX sliders: 0–2000%.
+
+MOBILE / NAVIGATION
+- 390px mobile QA: no horizontal overflow.
+- User text selection disabled.
+- User zoom disabled in viewport.
+- touch-action configured.
+- Universal Back control visible away from home.
+- Gameplay Back returns to campaign map.
+- Character picker and modal can be closed/backed out.
+
+CONTENT / RETENTION
+- Cosmetics: 12 trails / 8 launchers / 8 impact effects.
+- Daily Contracts.
+- Achievements.
+- Star Vault.
+- Character mastery.
+- Endless Run.
+- Boss Rush.
+- Daily Challenge.
+- 8-hour Stasis Melt random finite-swap reward.
+
+FINAL LEVEL CERTIFICATION
+- 400/400 PASS
+- Unique structure fingerprints: 400/400
+- Block systems represented: 20/20
+- Layout families: 23
+
+REPOSITORY RULES
+- Flat/root-only ZIP: PASS
+- Total project files: 34
+- <=100 files: PASS
+- Multiple real source files: PASS
+- GitHub Pages/static/no build: PASS
+- No CDN/external runtime dependency: PASS
+- PWA manifest/service worker: PASS
+- 180/192/512 app icons: PASS
+- No emoji/pictographs in game source/UI: PASS
+- Local assets only: PASS
+- JavaScript syntax checks: PASS
+- Headless Chromium page errors: 0
+- Mobile page errors: 0
